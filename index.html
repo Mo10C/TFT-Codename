@@ -3,22 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.ico" sizes="any">
 <title>コードネーム単語ジェネレーター — TFT Set 17</title>
 <style>
   :root{
-    --bg:#eef1f7;
-    --panel:#ffffff;
-    --panel-2:#f4f6fb;
-    --line:#d9e0ec;
-    --line-soft:#e7ecf5;
-    --text:#1a2435;
-    --muted:#5c6a85;
-    --muted-2:#94a1ba;
-    --teal:#0fb3a3;
-    --teal-ink:#06463f;
-    --teal-soft:#d6f3ef;
-    --gold:#c98a00;
-    --danger:#e23d6b;
+    --bg:#eef1f7;--panel:#ffffff;--panel-2:#f4f6fb;--line:#d9e0ec;--line-soft:#e7ecf5;
+    --text:#1a2435;--muted:#5c6a85;--muted-2:#94a1ba;
+    --teal:#0fb3a3;--teal-ink:#06463f;--teal-soft:#d6f3ef;--gold:#c98a00;--danger:#e23d6b;
     --radius:13px;
     --jp:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
     --mono:"SF Mono","JetBrains Mono","Roboto Mono","Consolas",ui-monospace,monospace;
@@ -31,15 +22,11 @@
       radial-gradient(1100px 540px at 82% -8%, rgba(15,179,163,.10), transparent 60%),
       radial-gradient(880px 480px at -6% 108%, rgba(201,138,0,.07), transparent 55%),
       var(--bg);
-    color:var(--text);
-    font-family:var(--jp);
-    -webkit-font-smoothing:antialiased;
-    line-height:1.5;
-    min-height:100vh;
+    color:var(--text);font-family:var(--jp);-webkit-font-smoothing:antialiased;line-height:1.5;min-height:100vh;
   }
-  .wrap{max-width:1120px;margin:0 auto;padding:28px 20px 64px}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 64px}
 
-  header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px;border-bottom:1px solid var(--line);padding-bottom:18px}
+  header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
   .brand{display:flex;flex-direction:column;gap:6px}
   .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:8px}
   .eyebrow::before{content:"";width:18px;height:2px;background:var(--teal);display:inline-block}
@@ -48,8 +35,18 @@
   .stat{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:right;line-height:1.7}
   .stat b{color:var(--text);font-size:20px}
 
+  /* tabs */
+  .tabs{display:inline-flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:4px;margin-bottom:20px;box-shadow:var(--shadow)}
+  .tab{font-family:var(--jp);font-weight:700;font-size:14px;color:var(--muted);background:transparent;border:0;padding:9px 18px;border-radius:8px;cursor:pointer;transition:.15s;letter-spacing:.03em}
+  .tab:hover{color:var(--text)}
+  .tab.on{background:var(--teal);color:#fff;box-shadow:0 6px 14px -8px rgba(15,179,163,.8)}
+  .panel{display:none}
+  .panel.on{display:block}
+
   .grid{display:grid;grid-template-columns:.92fr 1.08fr;gap:20px;align-items:start}
   @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  .grid2{display:grid;grid-template-columns:.78fr 1.22fr;gap:20px;align-items:start}
+  @media(max-width:900px){.grid2{grid-template-columns:1fr}}
 
   .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
   .card > .hd{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
@@ -60,7 +57,7 @@
   .mbtn:active{transform:translateY(1px)}
   .mbtn.warn:hover{color:#fff;background:var(--danger);border-color:var(--danger)}
 
-  /* category rows */
+  /* category step rows */
   .cats{padding:6px}
   .row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;padding:9px 10px;border-radius:9px}
   .row + .row{border-top:1px solid var(--line-soft)}
@@ -79,15 +76,16 @@
   .stepper .mx{width:auto;padding:0 7px;font-size:10px;font-family:var(--mono);letter-spacing:.05em;color:var(--muted-2)}
   .stepper .mx:hover{color:var(--teal)}
 
-  .genrow{padding:14px 16px;border-top:1px solid var(--line-soft)}
+  .genrow{padding:14px 16px;border-top:1px solid var(--line-soft);display:flex;flex-direction:column;gap:10px}
   .genbtn{width:100%;font-family:var(--jp);font-weight:800;font-size:17px;letter-spacing:.06em;color:#fff;
     background:linear-gradient(180deg,#16c4b2,var(--teal));border:0;border-radius:11px;padding:15px 18px;cursor:pointer;
     box-shadow:0 8px 20px -8px rgba(15,179,163,.7);transition:.15s}
   .genbtn:hover{filter:brightness(1.05)}
   .genbtn:active{transform:translateY(2px);box-shadow:0 4px 12px -8px rgba(15,179,163,.7)}
+  .genbtn.sub{font-size:15px;padding:13px}
   .genbtn .k{font-family:var(--mono);font-size:12px;opacity:.8;margin-left:.5em;font-weight:600}
 
-  /* results / chips */
+  /* chips (tab1) */
   .resmeta{font-family:var(--mono);font-size:12px;color:var(--teal)}
   .chipsbox{padding:14px 16px;min-height:300px}
   .chips{display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start}
@@ -101,7 +99,6 @@
   .chip .cbtn{width:22px;height:22px;border:0;background:transparent;color:var(--muted-2);cursor:pointer;border-radius:6px;font-size:13px;line-height:1;display:grid;place-items:center;transition:.12s}
   .chip .cbtn:hover{color:var(--teal);background:#fff}
   .chip .cbtn.rm:hover{color:var(--danger)}
-
   .addrow{display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
   .addrow input{flex:1;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;color:var(--text);font-family:var(--jp);font-size:14px}
   .addrow input:focus{outline:none;border-color:var(--teal)}
@@ -123,7 +120,6 @@
   .toggle input:checked + .track{background:var(--teal-soft);border-color:var(--teal)}
   .toggle input:checked + .track .knob{left:20px;background:var(--teal)}
   .toggle:focus-within .track{box-shadow:0 0 0 3px var(--teal-soft)}
-
   .copyrow{display:flex;gap:10px}
   .copybtn{flex:1;font-family:var(--jp);font-weight:700;font-size:14px;color:#fff;background:linear-gradient(180deg,#16c4b2,var(--teal));
     border:0;border-radius:9px;padding:12px;cursor:pointer;transition:.15s;letter-spacing:.04em;box-shadow:0 6px 16px -8px rgba(15,179,163,.7)}
@@ -133,6 +129,27 @@
   .clearbtn{font-family:var(--jp);font-weight:600;font-size:14px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:0 16px;cursor:pointer}
   .clearbtn:hover{color:var(--danger);border-color:var(--danger)}
   .hint{font-size:12px;color:var(--muted-2);line-height:1.75}
+
+  /* tab2 word list */
+  .listtools{padding:12px 16px;border-bottom:1px solid var(--line-soft);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .search{flex:1;min-width:160px;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;color:var(--text);font-family:var(--jp);font-size:14px}
+  .search:focus{outline:none;border-color:var(--teal)}
+  .listbody{padding:6px 16px 16px;max-height:64vh;overflow:auto}
+  .group{padding:12px 0;border-bottom:1px solid var(--line-soft)}
+  .group:last-child{border-bottom:0}
+  .ghd{display:flex;align-items:center;gap:9px;margin-bottom:9px;flex-wrap:wrap}
+  .ghd .glab{font-size:14px;font-weight:700}
+  .ghd .gcnt{font-family:var(--mono);font-size:11px;color:var(--muted-2)}
+  .ghd .gsel{margin-left:auto;display:flex;gap:5px}
+  .words{display:flex;flex-wrap:wrap;gap:7px}
+  .wd{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:8px;padding:6px 10px 6px 8px;cursor:pointer;background:var(--panel);transition:.12s;user-select:none}
+  .wd:hover{border-color:var(--muted-2)}
+  .wd input{appearance:none;-webkit-appearance:none;width:16px;height:16px;border:1.5px solid var(--muted-2);border-radius:5px;cursor:pointer;position:relative;flex:0 0 auto;transition:.12s}
+  .wd input:checked{background:var(--gcol,var(--teal));border-color:var(--gcol,var(--teal))}
+  .wd input:checked::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:900}
+  .wd span{font-size:13.5px;font-weight:600;white-space:nowrap}
+  .wd.checked{background:var(--panel-2);border-color:var(--gcol,var(--teal))}
+  .wd.hide{display:none}
   footer{margin-top:26px;font-family:var(--mono);font-size:11px;color:var(--muted-2);text-align:center;letter-spacing:.05em}
 </style>
 </head>
@@ -141,64 +158,94 @@
   <header class="top">
     <div class="brand">
       <div class="eyebrow">CODENAME WORD POOL · TFT SET 17</div>
-      <h1>コードネーム単語ジェネレーター <small>ランダム抽出 + 編集</small></h1>
+      <h1>コードネーム単語ジェネレーター</h1>
     </div>
     <div class="stat">プール総数<br><b id="poolTotal">0</b> words / <span id="catCount">0</span> categories</div>
   </header>
 
-  <div class="grid">
-    <!-- 左：カテゴリ指定 -->
-    <section class="card">
-      <div class="hd">
-        <h2>カテゴリーと抽出数</h2>
-        <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button class="mbtn" id="presetEven">各3</button>
-          <button class="mbtn warn" id="clearCounts">すべて0</button>
-        </div>
-      </div>
-      <div class="cats" id="cats"></div>
-      <div class="genrow">
-        <button class="genbtn" id="genBtn">抽出する<span class="k">[ Enter ]</span></button>
-      </div>
-    </section>
+  <div class="tabs">
+    <button class="tab on" data-tab="gen">ランダム抽出</button>
+    <button class="tab" data-tab="list">単語リスト（チェック式）</button>
+  </div>
 
-    <!-- 右：結果（編集可能） -->
-    <section class="card">
-      <div class="hd">
-        <h2>抽出結果 — 自由に編集できます</h2>
-        <span class="resmeta" id="resCount">0 words</span>
-      </div>
-      <div class="chipsbox">
-        <div class="chips" id="chips"></div>
-        <div class="empty" id="empty">左でカテゴリーと個数を指定して「抽出する」を押してください。<br>各単語は <b>クリックで書き換え</b> / <b>⟳ で引き直し</b> / <b>✕ で削除</b> / <b>ドラッグで並べ替え</b> できます。</div>
-        <div class="addrow">
-          <input type="text" id="addInput" placeholder="単語を手入力して追加（Enter）">
-          <button id="addBtn">追加</button>
-        </div>
-      </div>
-      <div class="outfoot">
-        <div class="optline">
-          <span class="ol-lab">コピー時の区切り</span>
-          <div class="seg" id="sepSeg">
-            <button data-sep="nl" class="on">改行</button>
-            <button data-sep="comma">カンマ</button>
-            <button data-sep="space">スペース</button>
+  <!-- ============ TAB 1: ランダム抽出 ============ -->
+  <div class="panel on" id="panel-gen">
+    <div class="grid">
+      <section class="card">
+        <div class="hd">
+          <h2>カテゴリーと抽出数</h2>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="mbtn" id="g_even">各3</button>
+            <button class="mbtn warn" id="g_clear">すべて0</button>
           </div>
         </div>
-        <div class="optline">
-          <label class="toggle" for="dedupeTog">
-            <input type="checkbox" id="dedupeTog" checked>
-            <span class="track"><span class="knob"></span></span>
-            <span class="ol-lab">コピー時に重複を除く</span>
-          </label>
+        <div class="cats" id="cats1"></div>
+        <div class="genrow"><button class="genbtn" id="genBtn">抽出する<span class="k">[ Enter ]</span></button></div>
+      </section>
+
+      <section class="card">
+        <div class="hd"><h2>抽出結果 — 自由に編集できます</h2><span class="resmeta" id="resCount">0 words</span></div>
+        <div class="chipsbox">
+          <div class="chips" id="chips"></div>
+          <div class="empty" id="empty">左でカテゴリーと個数を指定して「抽出する」を押してください。<br>各単語は <b>クリックで書き換え</b> / <b>⟳ で引き直し</b> / <b>✕ で削除</b> / <b>ドラッグで並べ替え</b> できます。</div>
+          <div class="addrow">
+            <input type="text" id="addInput" placeholder="単語を手入力して追加（Enter）">
+            <button id="addBtn">追加</button>
+          </div>
         </div>
-        <div class="copyrow">
-          <button class="copybtn" id="copyBtn">コピー</button>
-          <button class="clearbtn" id="clearChips">結果を全消去</button>
+        <div class="outfoot">
+          <div class="optline">
+            <span class="ol-lab">コピー時の区切り</span>
+            <div class="seg sepSeg"><button data-sep="nl" class="on">改行</button><button data-sep="comma">カンマ</button><button data-sep="space">スペース</button></div>
+          </div>
+          <div class="optline">
+            <label class="toggle"><input type="checkbox" class="dedupeTog" checked><span class="track"><span class="knob"></span></span><span class="ol-lab">コピー時に重複を除く</span></label>
+          </div>
+          <div class="copyrow"><button class="copybtn" id="copyBtn1">コピー</button><button class="clearbtn" id="clearChips">結果を全消去</button></div>
+          <div class="hint">「抽出する」は現在のリストに<b>追記</b>します。やり直すときは「結果を全消去」。⟳ は同じカテゴリーから別の単語を引き直します。</div>
         </div>
-        <div class="hint">「抽出する」は現在のリストに<b>追記</b>します。最初からやり直すときは「結果を全消去」を押してください。⟳ は同じカテゴリーから別の単語を引き直します（手入力した単語は全プールから引き直し）。</div>
-      </div>
-    </section>
+      </section>
+    </div>
+  </div>
+
+  <!-- ============ TAB 2: チェック式単語リスト ============ -->
+  <div class="panel" id="panel-list">
+    <div class="grid2">
+      <section class="card">
+        <div class="hd">
+          <h2>ランダムにチェック</h2>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="mbtn" id="l_even">各3</button>
+            <button class="mbtn warn" id="l_clear">すべて0</button>
+          </div>
+        </div>
+        <div class="cats" id="cats2"></div>
+        <div class="genrow">
+          <button class="genbtn sub" id="randCheckBtn">ランダムにチェックを入れる</button>
+        </div>
+        <div class="outfoot">
+          <div class="optline">
+            <span class="ol-lab">コピー時の区切り</span>
+            <div class="seg sepSeg"><button data-sep="nl" class="on">改行</button><button data-sep="comma">カンマ</button><button data-sep="space">スペース</button></div>
+          </div>
+          <div class="optline">
+            <label class="toggle"><input type="checkbox" class="dedupeTog" checked><span class="track"><span class="knob"></span></span><span class="ol-lab">コピー時に重複を除く</span></label>
+          </div>
+          <div class="copyrow"><button class="copybtn" id="copyBtn2">チェックした単語をコピー</button><button class="clearbtn" id="uncheckAll">全チェック解除</button></div>
+          <div class="hint">「ランダムにチェックを入れる」は、各カテゴリーの<b>未チェックの単語</b>から指定数だけランダムにチェックします（追加方式）。あとは右の一覧で自分でオン/オフして調整してください。</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="hd"><h2>全単語リスト</h2><span class="resmeta" id="checkedCount">0 / 0 選択中</span></div>
+        <div class="listtools">
+          <input type="text" class="search" id="searchInput" placeholder="絞り込み検索（例: アーマー、エイト…）">
+          <button class="mbtn" id="filterChecked">選択中のみ表示</button>
+          <button class="mbtn" id="showAll">全表示</button>
+        </div>
+        <div class="listbody" id="listBody"></div>
+      </section>
+    </div>
   </div>
 
   <footer>TFT Set 17 vocabulary · champions · traits · items · augments</footer>
@@ -206,155 +253,182 @@
 
 <script>
 const WORDS = {"categories":[{"key":"champion","label":"チャンピオン","color":"#7fd0ff","words":["エイトロックス","ブライアー","ケイトリン","チョ=ガス","エズリアル","レオナ","リサンドラ","ナサス","ポッピー","レク=サイ","タロン","ティーモ","ツイステッド・フェイト","ベイガー","アカリ","ベル=ヴェス","ナー","グラガス","グウェン","ジャックス","ジンクス","ミープシー","ミリオ","モルデカイザー","パンテオン","パイク","ゾーイ","オーロラ","ダイアナ","フィズ","イラオイ","カイ=サ","ルル","マオカイ","ミス・フォーチュン","オーン","ラスート","サミーラ","アーゴット","ビクター","オレリオン・ソル","カルマ","キンドレッド","コーキ","ザヤ","タム・ケンチ","ナミ","ヌヌ＆ウィルンプ","マイティーロボ","マスター・イー","モルガナ","ラムス","リヴェン","ルブラン","ヴェックス","グレイブス","シェン","ジン","ゼド","ソナ","バード","フィオラ","ブリッツクランク"]},{"key":"trait","label":"特性","color":"#66e0a0","words":["銃装機神","N.O.V.A.","バスティオン","アニマ","プライモーディアン","ローグ","フェイトウィーバー","ダークスター","ブローラー","タイムブレーカー","スナイパー","アービター","ヴァンガード","導き手","レプリケーター","スペースグルーヴ","ミィプル","星の観測者","略奪者","チャレンジャー","サイオニック","コンジット","ヴォイジャー","メカ","救済者","神託","闇の女帝","ドゥーマー","ファクトリー","ブルワーク","根絶者","ギャラクシー","コマンダー","聖なる決闘者","パーティータイム"]},{"key":"item_comp","label":"素材アイテム","color":"#aab6c8","words":["B.F.ソード","リカーブボウ","ムダニデカイロッド","女神の涙","チェインベスト","ネガトロンクローク","ジャイアントベルト","スパーリンググローブ","黄金のへら","フライパン"]},{"key":"item_psionic","label":"サイオニックアイテム","color":"#a06bff","words":["ターゲットロック スコープ","共感インプラント","ドローン アップリンク","マルウェア マトリックス","バイオ物質保存装置"]},{"key":"item_completed","label":"完成アイテム","color":"#ff9f43","words":["デスブレード","ジャイアントスレイヤー","ヘクステックガンブレード","ショウジンの矛","ナイトエッジ","ブラッドサースター","ステラックの篭手","インフィニティエッジ","レッドバフ","グインソー レイジブレード","ヴォイドスタッフ","巨人の誓い","クラーケンの怒り","ナッシャー トゥース","ラストウィスパー","ラバドンデスキャップ","アークエンジェルスタッフ","クラウンガード","アイオニックスパーク","モレロノミコン","ジュエル ガントレット","ブルーバフ","プロテクターの誓い","アダプティブヘルム","スピリット ビサージュ","ハンド オブ ジャスティス","ブランブルベスト","ガーゴイルストーンプレート","サンファイアケープ","揺るがぬ心","ドラゴン クロウ","イーブンシュラウド","クイックシルバー","ワーモグ アーマー","ストライカー フレイル","盗賊のグローブ","タクティシャンの王冠"]},{"key":"item_emblem","label":"紋章","color":"#56c98a","words":["ダークスターの紋章","タイムブレイカーの紋章","星の観測者の紋章","スペースグルーヴの紋章","ミィプルの紋章","アービターの紋章","プリモーディアンの紋章","N.O.V.A.の紋章","略奪者の紋章","チャレンジャーの紋章","ボイジャーの紋章","導き手の紋章","バスティオンの紋章","ヴァンガードの紋章","ブローラーの紋章","ローグの紋章","アニマの紋章","サイオニックの紋章","スナイパーの紋章"]},{"key":"item_consumable","label":"消費アイテム","color":"#7fe0d0","words":["小さなチャンピオン複製機","小型チャンピオン複製機","チャンピオン複製機","再合成装置","磁力式除去装置"]},{"key":"item_artifact","label":"アーティファクト","color":"#e0a060","words":["アーリのオーラ","イブリンの直感","インフィニティ フォース","ヴァルスの執念","ウィッツ エンド","ヴォイド ガントレット","エコーの忍耐","ギャンブラーの剣","ゴールド コレクター","シーカー アームガード","シルバーミアの夜明け","スタティック シヴ","スナイパー フォーカス","スレッシュのランタン","ゾーニャの砂時計","ソラカの奇跡","タイタン ハイドラ","デス ディファイアンス","ドーンコア","ハルクラッシャー","フィッシュボーン","フリッカーブレード","プローラー クロウ","ミトン","モーグル メイル","ヤスオのブレードワーク","ライトシールドのクレスト","ラピッド ファイアキャノン","リッチ ベイン","ルーデン テンペスト","不屈","不滅の協定","夕闇の加護","夜明けの加護","帽子ジュース","枯死の宝石","獄炎のハチェット","超越のタリスマン","デマーシアの王冠"]},{"key":"item_radiant","label":"レディアントアイテム","color":"#ffd76e","words":["レディアント デスブレード","レディアント ジャイアントスレイヤー","レディアント ヘクステックガンブレード","レディアント ショウジンの矛","レディアント ナイトエッジ","レディアント ブラッドサースター","レディアント ステラックの篭手","レディアント インフィニティエッジ","レディアント レッドバフ","レディアント グインソー レイジブレード","レディアント ヴォイドスタッフ","レディアント 巨人の誓い","レディアント クラーケンの怒り","レディアント ナッシャー トゥース","レディアント ラストウィスパー","レディアント ラバドンデスキャップ","レディアント アークエンジェルスタッフ","レディアント クラウンガード","レディアント アイオニックスパーク","レディアント モレロノミコン","レディアント ジュエル ガントレット","レディアント ブルーバフ","レディアント プロテクターの誓い","レディアント アダプティブヘルム","レディアント スピリット ビサージュ","レディアント ハンド オブ ジャスティス","レディアント ブランブルベスト","レディアント ガーゴイルストーンプレート","レディアント サンファイアケープ","レディアント 揺るがぬ心","レディアント ドラゴン クロウ","レディアント イーブンシュラウド","レディアント クイックシルバー","レディアント ワーモグ アーマー","レディアント ストライカー フレイル","レディアント 盗賊のグローブ"]},{"key":"aug_silver","label":"オーグメント（銀）","color":"#c4ccd8","words":["アイテム福袋","一 二 三","一致団結(素材)","一致団結(特性)","命懸けの戦い","AFK","エグザイル I","エクスペディション","援護の弓","オーグメントパワー","カナとカネ","起死回生","キックスタート","吸血の胆力 I","銀の匙","グラスキャノン I","クリティカル サクセス","構成拡大","構成拡大+","コグニティブ タックス","コグニティブ タックス+","ここがセンター","混乱回復装置","ザ・タワー","サイズが大事","サバイバー","シールドメイデン","集中砲火","ステラコンボ","絶好調","即席アーマー I","ターミィプナル ヴェロシティー","巧みなクラフト","ダミー化","小さな巨人","小さな福袋","チーム構築","チャージトランスファー I","昼食代","ちょっとだけ魔法のダイス","ツイてる気分","ツインガーディアン","盗賊団","友を鍛える","流れる涙","忍耐の美徳","はしごを登れ I","パンドラのアイテム","ヒーリングオーブ I","庇護者のお供","ファイアセール","不完全アセンション","腐食","普通の日々","ベストフレンド I","放電 I","ボカッ！","ボクシングのレッスン","ミスコネクション","道を切り拓け","ミッションの再開","未来の鍛冶場","みんなでハグ I","有効活用 I","ラインナップ","レイトゲーム スペシャリスト","連続魔法","ローリングデイズ I","ワン、ツー、ファイブ！"]},{"key":"aug_gold","label":"オーグメント（金）","color":"#ffcb52","words":["Arcane ビクタリー","アーフの策略","アセンション","アニマ司令官","一人前プレート","インフィニティの守護","ウォーロードの名誉","宇宙の再起","英雄のラッキーバッグ","英雄のラッキーバッグ+","英雄のラッキーバッグ++","エグザイル II","エピックなロールダウン","エポック","エポック+","王冠とは重きもの","黄金の龍","大きな福袋","オーラ育成中","お得な2","俺だけレベルアップ","回収箱","回収箱+","カフナフナ","神の鍛冶場","起死回生 II","銀河を巡る旅","金に飢えし者","金ピカの鋼","グラスキャノン II","剣鍛冶","研究熱心","限定カスタマイズ","後衛の設計図","高速ダブルキル","高電圧","コグニティブ オーバーロード","コンパニオン作成","最強の四配者","サイバネティック アップリンク","サイバネティック インプラント","3の軍団","サンファイア ボード","仕送り","自己破壊","邪悪な収益化","集中","ジュエル ロータス I","主人公補正","出陣","生涯ブロンズ I","衝突試験用ダミー","神聖なる修正","侵略者ゼド","好きなだけ泣くがいい","ステータスマシマシ","窃盗","セラフィムの杖","前衛の礎","先見性","戦略的敗北","早期教育","即席アーマー II","タイムストリーム","宝探し","叩きつけ","叩きつけ+","小さな仲間たち","血の供物","チャージトランスファー II","杖鍛冶","紡がれし魔法","偵察なし、変更なし","デュオキュー","時計仕掛けの加速装置","トライフェクタ I","トレードセクター","21ゴールド獲得","2体のタンク","熱死","バースデー リユニオン","鋼の心","爆発的成長","爆発的成長+","はしごを登れ II","ハスラー","パンドラのアイテム II","ヒーリングオーブ II","ビッグバン","広がる根","広がる根+","ブースターパック","ブースターパック+","ブースターパック++","フォーが共にあらんことを","副作用","複製","普通預金口座","不適合者","プロの殺し屋","プロボクサー","ベストフレンド II","放電 II","ポータブル フォージ","星を目指して","ボディーガードの訓練","炎を強めて","前借り","前借り+","待つ価値あり","魔法のダイス","乱れる思考","みんなでハグ II","無差別殺人者","明鏡止水","メイスの決意","U.R.F.","弓の誓い","リデンプションの魂","ルート・シンギュラリティ","レイトゲーム スケーリング"]},{"key":"aug_prism","label":"オーグメント（虹）","color":"#ff7ad9","words":["アーフの福袋","甘いおやつ","歩く鍛冶場","いつでも一緒","埋もれた宝物","黄金の博打","黄金の博打+","黄金の博打++","思惑買い","カースドのクラウン","買い物三昧","輝く悪党","賢い買い物","勝ち抜け","逆転劇","金のタマゴ","金のモンスーン","限定カスタマイズ II","豪華なサブスク","コマース コア","混沌への呼び声","サブスクリプション","シマースケールのエッセンス","ジャイアント&マイティ","柔軟性","ジュエル ロータス II","生涯ブロンズ II","上方移動","新兵","新兵+","崇高の冒険","スワーム ハート","全身全霊","前線維持","想定内の意外性","ソウルの目覚め","ソード オーバーフロー","素材アイテムヘイスト","代償","タクティシャンの台所","小さくても強烈","力に鍛えられしもの","デッドリアー ブレード","投資完了+","投資完了++","盗賊団 II","盗賊団 II+","盗賊団 II++","特性の木","特性の木+","トライフェクタ II","仲間を作ろう","バースデープレゼント","バフが1つ、バフが2つ","バロンの巣","パンドラのアイテム III","プリズムチケット","ヘッジファンド","ヘッジファンド+","ベルト オーバーフロー","報復","待つ価値あり II","ミニマックス","もっと怖いキャップ","もっと小さな巨人","ラッキーグローブ","ラッキーグローブ+","レベルアップ！","ワンド オーバーフロー"]}]};
-
 const cats = WORDS.categories;
-const catByKey = {}; cats.forEach(c=>catByKey[c.key]=c);
+const catByKey={}; cats.forEach(c=>catByKey[c.key]=c);
 const allWords = cats.flatMap(c=>c.words);
-const state = {}; cats.forEach(c=>state[c.key]=0);
-let sep = 'nl';
-
-/* ---------- category controls ---------- */
-const catsEl = document.getElementById('cats');
-cats.forEach(c=>{
-  const row = document.createElement('div');
-  row.className='row off'; row.dataset.key=c.key;
-  const main=document.createElement('div'); main.className='rowmain';
-  main.innerHTML=`<span class="dot" style="background:${c.color}"></span>
-    <span class="rowtext"><span class="lab">${c.label}</span><span class="avail">在庫 ${c.words.length}</span></span>`;
-  main.title='クリックで最大／0を切替';
-  main.onclick=()=> setCount(c.key, state[c.key]>0?0:c.words.length);
-  const step=document.createElement('div'); step.className='stepper';
-  step.innerHTML=`<button data-act="dec">−</button>
-    <input type="text" inputmode="numeric" value="0" aria-label="${c.label}の抽出数">
-    <button data-act="inc">+</button><button class="mx" data-act="max">MAX</button>`;
-  const input=step.querySelector('input');
-  step.querySelector('[data-act=dec]').onclick=()=>setCount(c.key,state[c.key]-1);
-  step.querySelector('[data-act=inc]').onclick=()=>setCount(c.key,state[c.key]+1);
-  step.querySelector('[data-act=max]').onclick=()=>setCount(c.key,c.words.length);
-  input.addEventListener('input',()=>{let v=parseInt(input.value.replace(/[^0-9]/g,''),10);if(isNaN(v))v=0;setCount(c.key,v,true);});
-  row.appendChild(main); row.appendChild(step); catsEl.appendChild(row);
-  c._row=row; c._input=input;
-});
-function clamp(c,v){return Math.max(0,Math.min(v,c.words.length));}
-function setCount(key,v,fromInput){
-  const c=catByKey[key]; const val=clamp(c,v|0); state[key]=val;
-  if(!fromInput||c._input.value!==String(val)) c._input.value=val;
-  c._row.classList.toggle('off',val===0);
-}
 document.getElementById('poolTotal').textContent=allWords.length;
 document.getElementById('catCount').textContent=cats.length;
-document.getElementById('presetEven').onclick=()=>cats.forEach(c=>setCount(c.key,Math.min(3,c.words.length)));
-document.getElementById('clearCounts').onclick=()=>cats.forEach(c=>setCount(c.key,0));
 
-/* ---------- separator ---------- */
-document.getElementById('sepSeg').addEventListener('click',e=>{
-  const b=e.target.closest('button'); if(!b) return; sep=b.dataset.sep;
-  document.querySelectorAll('#sepSeg button').forEach(x=>x.classList.toggle('on',x===b));
+/* shared utils */
+function clamp(c,v){return Math.max(0,Math.min(v,c.words.length));}
+function sample(arr,n){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a.slice(0,n);}
+const SEPCH={nl:'\n',comma:', ',space:' '};
+function flashCopy(btn,text){
+  if(!text) return;
+  (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject())
+   .catch(()=>{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();});
+  const old=btn.textContent; btn.classList.add('done'); btn.textContent='コピーしました ✓';
+  setTimeout(()=>{btn.classList.remove('done');btn.textContent=old;},1400);
+}
+/* per-seg state */
+document.querySelectorAll('.sepSeg').forEach(seg=>{
+  seg.dataset.sep='nl';
+  seg.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;seg.dataset.sep=b.dataset.sep;seg.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));});
 });
 
-/* ---------- chips ---------- */
-const chipsEl=document.getElementById('chips');
-const emptyEl=document.getElementById('empty');
-
-function currentTexts(){return [...chipsEl.querySelectorAll('.chip .txt')].map(t=>t.textContent.trim());}
-function poolFor(key){return key==='__mix__'?allWords:catByKey[key].words;}
-
-function makeChip(text,key){
-  const c=key==='__mix__'?null:catByKey[key];
-  const chip=document.createElement('div');
-  chip.className='chip'; chip.dataset.key=key; chip.draggable=true;
-  chip.style.setProperty('--cc', c?c.color:'#cbd5e6');
-
-  const txt=document.createElement('span');
-  txt.className='txt'; txt.contentEditable='true'; txt.spellcheck=false; txt.textContent=text;
-  txt.addEventListener('focus',()=>chip.draggable=false);
-  txt.addEventListener('blur',()=>{chip.draggable=true; if(!txt.textContent.trim()){chip.remove();updateCount();}});
-  txt.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();txt.blur();}});
-
-  const sw=document.createElement('button'); sw.className='cbtn'; sw.title='別の単語に引き直す'; sw.textContent='⟳';
-  sw.onclick=()=>swap(chip,txt);
-  const rm=document.createElement('button'); rm.className='cbtn rm'; rm.title='削除'; rm.textContent='✕';
-  rm.onclick=()=>{chip.remove();updateCount();};
-
-  chip.appendChild(txt); chip.appendChild(sw); chip.appendChild(rm);
-
-  chip.addEventListener('dragstart',()=>{dragSrc=chip;chip.classList.add('dragging');});
-  chip.addEventListener('dragend',()=>{chip.classList.remove('dragging');dragSrc=null;});
-  chip.addEventListener('dragover',e=>{
-    e.preventDefault(); if(!dragSrc||chip===dragSrc) return;
-    const box=chip.getBoundingClientRect();
-    const before=e.clientX < box.left+box.width/2;
-    chipsEl.insertBefore(dragSrc, before?chip:chip.nextSibling);
+/* reusable stepper panel */
+function buildSteppers(container, st, refs, onChange){
+  cats.forEach(c=>{
+    st[c.key]=0;
+    const row=document.createElement('div'); row.className='row off';
+    const main=document.createElement('div'); main.className='rowmain';
+    main.innerHTML=`<span class="dot" style="background:${c.color}"></span><span class="rowtext"><span class="lab">${c.label}</span><span class="avail">在庫 ${c.words.length}</span></span>`;
+    main.title='クリックで最大／0を切替';
+    main.onclick=()=>setCnt(st,refs,c.key, st[c.key]>0?0:c.words.length, false, onChange);
+    const step=document.createElement('div'); step.className='stepper';
+    step.innerHTML=`<button data-act="dec">−</button><input type="text" inputmode="numeric" value="0" aria-label="${c.label}の抽出数"><button data-act="inc">+</button><button class="mx" data-act="max">MAX</button>`;
+    const input=step.querySelector('input');
+    step.querySelector('[data-act=dec]').onclick=()=>setCnt(st,refs,c.key,st[c.key]-1,false,onChange);
+    step.querySelector('[data-act=inc]').onclick=()=>setCnt(st,refs,c.key,st[c.key]+1,false,onChange);
+    step.querySelector('[data-act=max]').onclick=()=>setCnt(st,refs,c.key,c.words.length,false,onChange);
+    input.addEventListener('input',()=>{let v=parseInt(input.value.replace(/[^0-9]/g,''),10);if(isNaN(v))v=0;setCnt(st,refs,c.key,v,true,onChange);});
+    row.appendChild(main); row.appendChild(step); container.appendChild(row);
+    refs[c.key]={row,input};
   });
-  return chip;
 }
+function setCnt(st,refs,key,v,fromInput,onChange){
+  const c=catByKey[key]; const val=clamp(c,v|0); st[key]=val;
+  const r=refs[key]; if(!fromInput||r.input.value!==String(val)) r.input.value=val;
+  r.row.classList.toggle('off',val===0);
+  if(onChange) onChange();
+}
+
+/* ===================== TAB 1 ===================== */
+const state1={},refs1={};
+buildSteppers(document.getElementById('cats1'),state1,refs1);
+document.getElementById('g_even').onclick=()=>cats.forEach(c=>setCnt(state1,refs1,c.key,Math.min(3,c.words.length)));
+document.getElementById('g_clear').onclick=()=>cats.forEach(c=>setCnt(state1,refs1,c.key,0));
+
+const chipsEl=document.getElementById('chips'), emptyEl=document.getElementById('empty');
 let dragSrc=null;
 chipsEl.addEventListener('dragover',e=>e.preventDefault());
-
-function swap(chip,txt){
-  const key=chip.dataset.key;
-  const pool=poolFor(key);
-  const used=new Set(currentTexts());
-  const cur=txt.textContent.trim();
-  let cand=pool.filter(w=>!used.has(w));
-  if(cand.length===0) cand=pool.filter(w=>w!==cur);
-  if(cand.length===0) return;
-  txt.textContent=cand[Math.floor(Math.random()*cand.length)];
+function chipTexts(){return [...chipsEl.querySelectorAll('.chip .txt')].map(t=>t.textContent.trim());}
+function poolFor(key){return key==='__mix__'?allWords:catByKey[key].words;}
+function makeChip(text,key){
+  const c=key==='__mix__'?null:catByKey[key];
+  const chip=document.createElement('div'); chip.className='chip'; chip.dataset.key=key; chip.draggable=true;
+  chip.style.setProperty('--cc',c?c.color:'#cbd5e6');
+  const txt=document.createElement('span'); txt.className='txt'; txt.contentEditable='true'; txt.spellcheck=false; txt.textContent=text;
+  txt.addEventListener('focus',()=>chip.draggable=false);
+  txt.addEventListener('blur',()=>{chip.draggable=true; if(!txt.textContent.trim()){chip.remove();updateCount1();}});
+  txt.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();txt.blur();}});
+  const sw=document.createElement('button'); sw.className='cbtn'; sw.title='別の単語に引き直す'; sw.textContent='⟳';
+  sw.onclick=()=>{const used=new Set(chipTexts());const cur=txt.textContent.trim();let cand=poolFor(key).filter(w=>!used.has(w));if(!cand.length)cand=poolFor(key).filter(w=>w!==cur);if(cand.length)txt.textContent=cand[Math.floor(Math.random()*cand.length)];};
+  const rm=document.createElement('button'); rm.className='cbtn rm'; rm.title='削除'; rm.textContent='✕';
+  rm.onclick=()=>{chip.remove();updateCount1();};
+  chip.appendChild(txt);chip.appendChild(sw);chip.appendChild(rm);
+  chip.addEventListener('dragstart',()=>{dragSrc=chip;chip.classList.add('dragging');});
+  chip.addEventListener('dragend',()=>{chip.classList.remove('dragging');dragSrc=null;});
+  chip.addEventListener('dragover',e=>{e.preventDefault();if(!dragSrc||chip===dragSrc)return;const box=chip.getBoundingClientRect();const before=e.clientX<box.left+box.width/2;chipsEl.insertBefore(dragSrc,before?chip:chip.nextSibling);});
+  return chip;
 }
-
-function sample(arr,n){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a.slice(0,n);}
-function updateCount(){
-  const n=chipsEl.querySelectorAll('.chip').length;
-  document.getElementById('resCount').textContent=n+' words';
-  emptyEl.style.display=n? 'none':'block';
-}
-
-function generate(){
-  cats.forEach(c=>{
-    const n=state[c.key]; if(n<=0) return;
-    sample(c.words,n).forEach(w=>chipsEl.appendChild(makeChip(w,c.key)));
-  });
-  updateCount();
-  resetCopy();
-}
+function updateCount1(){const n=chipsEl.querySelectorAll('.chip').length;document.getElementById('resCount').textContent=n+' words';emptyEl.style.display=n?'none':'block';}
+function generate(){cats.forEach(c=>{const n=state1[c.key];if(n<=0)return;sample(c.words,n).forEach(w=>chipsEl.appendChild(makeChip(w,c.key)));});updateCount1();}
 document.getElementById('genBtn').onclick=generate;
-document.getElementById('clearChips').onclick=()=>{chipsEl.innerHTML='';updateCount();};
-
-/* manual add */
+document.getElementById('clearChips').onclick=()=>{chipsEl.innerHTML='';updateCount1();};
 const addInput=document.getElementById('addInput');
-function addManual(){
-  const v=addInput.value.trim(); if(!v) return;
-  chipsEl.appendChild(makeChip(v,'__mix__')); addInput.value=''; updateCount();
-}
+function addManual(){const v=addInput.value.trim();if(!v)return;chipsEl.appendChild(makeChip(v,'__mix__'));addInput.value='';updateCount1();}
 document.getElementById('addBtn').onclick=addManual;
 addInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addManual();}});
+document.getElementById('copyBtn1').onclick=function(){
+  let list=chipTexts().filter(Boolean);
+  const seg=document.querySelector('#panel-gen .sepSeg');
+  if(document.querySelector('#panel-gen .dedupeTog').checked)list=[...new Set(list)];
+  flashCopy(this,list.join(SEPCH[seg.dataset.sep]));
+};
+updateCount1();
 
-/* global Enter -> generate */
-document.addEventListener('keydown',e=>{
-  if(e.key!=='Enter') return;
-  const t=e.target;
-  if(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable) return;
-  e.preventDefault(); generate();
+/* ===================== TAB 2 ===================== */
+const state2={},refs2={};
+buildSteppers(document.getElementById('cats2'),state2,refs2);
+document.getElementById('l_even').onclick=()=>cats.forEach(c=>setCnt(state2,refs2,c.key,Math.min(3,c.words.length)));
+document.getElementById('l_clear').onclick=()=>cats.forEach(c=>setCnt(state2,refs2,c.key,0));
+
+const listBody=document.getElementById('listBody');
+const inputsByCat={};            // key -> [input,...]
+cats.forEach(c=>{
+  inputsByCat[c.key]=[];
+  const g=document.createElement('div'); g.className='group'; g.dataset.key=c.key;
+  const hd=document.createElement('div'); hd.className='ghd';
+  hd.innerHTML=`<span class="dot" style="background:${c.color}"></span><span class="glab">${c.label}</span><span class="gcnt">${c.words.length}</span>
+    <span class="gsel"><button class="mbtn gall">全選択</button><button class="mbtn gnone">解除</button></span>`;
+  const words=document.createElement('div'); words.className='words';
+  c.words.forEach(w=>{
+    const lab=document.createElement('label'); lab.className='wd'; lab.style.setProperty('--gcol',c.color);
+    const cb=document.createElement('input'); cb.type='checkbox'; cb.dataset.key=c.key; cb.dataset.word=w;
+    const sp=document.createElement('span'); sp.textContent=w;
+    cb.addEventListener('change',()=>{lab.classList.toggle('checked',cb.checked);updateChecked();});
+    lab.appendChild(cb); lab.appendChild(sp); words.appendChild(lab);
+    inputsByCat[c.key].push(cb);
+  });
+  hd.querySelector('.gall').onclick=()=>{inputsByCat[c.key].forEach(cb=>{cb.checked=true;cb.closest('.wd').classList.add('checked');});updateChecked();};
+  hd.querySelector('.gnone').onclick=()=>{inputsByCat[c.key].forEach(cb=>{cb.checked=false;cb.closest('.wd').classList.remove('checked');});updateChecked();};
+  g.appendChild(hd); g.appendChild(words); listBody.appendChild(g);
 });
+function allChecked(){return [...listBody.querySelectorAll('input:checked')];}
+function updateChecked(){document.getElementById('checkedCount').textContent=allChecked().length+' / '+allWords.length+' 選択中';}
 
-/* copy */
-const SEPCH={nl:'\n',comma:', ',space:' '};
-const copyBtn=document.getElementById('copyBtn');
-function resetCopy(){copyBtn.classList.remove('done');copyBtn.textContent='コピー';}
-function buildText(){
-  let list=currentTexts().filter(Boolean);
-  if(document.getElementById('dedupeTog').checked) list=[...new Set(list)];
-  return list.join(SEPCH[sep]);
-}
-copyBtn.onclick=async()=>{
-  const text=buildText(); if(!text) return;
-  try{await navigator.clipboard.writeText(text);}
-  catch(_){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}
-  copyBtn.classList.add('done');copyBtn.textContent='コピーしました ✓';
-  setTimeout(resetCopy,1400);
+document.getElementById('randCheckBtn').onclick=()=>{
+  cats.forEach(c=>{
+    const n=state2[c.key]; if(n<=0)return;
+    const unchecked=inputsByCat[c.key].filter(cb=>!cb.checked);
+    sample(unchecked,n).forEach(cb=>{cb.checked=true;cb.closest('.wd').classList.add('checked');});
+  });
+  updateChecked();
+};
+document.getElementById('uncheckAll').onclick=()=>{allChecked().forEach(cb=>{cb.checked=false;cb.closest('.wd').classList.remove('checked');});updateChecked();};
+document.getElementById('copyBtn2').onclick=function(){
+  let list=allChecked().map(cb=>cb.dataset.word);
+  const seg=document.querySelector('#panel-list .sepSeg');
+  if(document.querySelector('#panel-list .dedupeTog').checked)list=[...new Set(list)];
+  flashCopy(this,list.join(SEPCH[seg.dataset.sep]));
 };
 
-updateCount();
+/* search / filter */
+const searchInput=document.getElementById('searchInput');
+function applyFilter(){
+  const q=searchInput.value.trim().toLowerCase();
+  const onlyChecked=listBody.dataset.only==='1';
+  listBody.querySelectorAll('.group').forEach(g=>{
+    let vis=0;
+    g.querySelectorAll('.wd').forEach(lab=>{
+      const w=lab.querySelector('input').dataset.word.toLowerCase();
+      let show=(!q||w.includes(q)) && (!onlyChecked||lab.classList.contains('checked'));
+      lab.classList.toggle('hide',!show); if(show)vis++;
+    });
+    g.style.display=vis?'':'none';
+  });
+}
+searchInput.addEventListener('input',applyFilter);
+document.getElementById('filterChecked').onclick=()=>{listBody.dataset.only='1';applyFilter();};
+document.getElementById('showAll').onclick=()=>{listBody.dataset.only='0';searchInput.value='';applyFilter();};
+updateChecked();
+
+/* ===================== tabs ===================== */
+document.querySelectorAll('.tab').forEach(t=>{
+  t.onclick=()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='panel-'+t.dataset.tab));
+  };
+});
+
+/* global Enter -> generate (tab1 only) */
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;
+  const t=e.target; if(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable)return;
+  if(!document.getElementById('panel-gen').classList.contains('on'))return;
+  e.preventDefault();generate();
+});
 </script>
 </body>
 </html>
